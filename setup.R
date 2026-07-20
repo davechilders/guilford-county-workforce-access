@@ -1,5 +1,6 @@
 library(tidycensus)
 library(sf)
+library(sfarrow)
 library(tidyverse)
 library(tidygeocoder)
 library(ggrepel)
