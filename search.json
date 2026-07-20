@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Workforce Services Accessibility in Guilford County, NC",
+    "section": "",
+    "text": "Code\nlibrary(sfarrow)\nlibrary(arrow)\nlibrary(sf)\nlibrary(ggplot2)\nlibrary(ggrepel)\nlibrary(viridis)\nlibrary(dplyr)\n\n\n\n\nCode\nguilford_acs &lt;- st_read_parquet(\"data/guilford_tracts-2026-07-20.parquet\")\ncenters &lt;- st_read_parquet(\"data/career-centers-geo-2026-07-20.parquet\")\nref_cities &lt;- read_parquet(\"data/ref-cities-2026-07-20.parquet\")"
+  },
+  {
+    "objectID": "index.html#quarto",
+    "href": "index.html#quarto",
+    "title": "Workforce Services Accessibility in Guilford County, NC",
+    "section": "",
+    "text": "Code\nlibrary(sfarrow)\nlibrary(arrow)\nlibrary(sf)\nlibrary(ggplot2)\nlibrary(ggrepel)\nlibrary(viridis)\nlibrary(dplyr)\n\n\n\n\nCode\nguilford_acs &lt;- st_read_parquet(\"data/guilford_tracts-2026-07-20.parquet\")\ncenters &lt;- st_read_parquet(\"data/career-centers-geo-2026-07-20.parquet\")\nref_cities &lt;- read_parquet(\"data/ref-cities-2026-07-20.parquet\")"
+  },
+  {
+    "objectID": "index.html#make-computations",
+    "href": "index.html#make-computations",
+    "title": "Workforce Services Accessibility in Guilford County, NC",
+    "section": "Make Computations",
+    "text": "Make Computations\n\n\nCode\nguilford_acs_proj &lt;- st_transform(guilford_acs, crs = 2264)\ncareer_centers_proj &lt;- st_transform(centers, crs = 2264)\nguilford_centroids_proj &lt;- st_centroid(guilford_acs_proj)\n\ndist_matrix &lt;- st_distance(guilford_centroids_proj, career_centers_proj)\n\nguilford_acs_proj &lt;- guilford_acs_proj |&gt;\n  mutate(dist_to_nearest_center_miles = apply(dist_matrix, 1, min) / 5280)\n\nguilford_acs &lt;- guilford_acs |&gt;\n  left_join(\n    st_drop_geometry(guilford_acs_proj) |&gt; select(GEOID, dist_to_nearest_center_miles),\n    by = \"GEOID\"\n  )\n\n\n\n\nCode\ncareer_centers_coords &lt;- centers |&gt;\n  mutate(lon = st_coordinates(geometry)[, 1],\n         lat = st_coordinates(geometry)[, 2]) |&gt;\n  st_drop_geometry()"
+  },
+  {
+    "objectID": "index.html#make-figure",
+    "href": "index.html#make-figure",
+    "title": "Workforce Services Accessibility in Guilford County, NC",
+    "section": "Make Figure",
+    "text": "Make Figure\n\n\nCode\nggplot(guilford_acs) +\n  geom_sf(aes(fill = unemployment_rate)) +\n  scale_fill_viridis(name = \"Unemployment\\nRate\", labels = scales::percent) +\n  geom_point(data = career_centers_coords, aes(x = lon, y = lat),\n             color = \"red\", size = 3, shape = 17) +\n  geom_label_repel(data = career_centers_coords,\n                    aes(x = lon, y = lat, label = name),\n                    size = 3, fontface = \"bold\",\n                    box.padding = 0.5, segment.color = \"red\") +\n  geom_text_repel(data = ref_cities,\n                   aes(x = long, y = lat, label = name),\n                   size = 2.8, color = \"gray30\", fontface = \"italic\",\n                   box.padding = 0.4, max.overlaps = 15,\n                   min.segment.length = 0, seed = 42) +\n  theme_minimal() +\n  labs(title = \"Unemployment Rate by Census Tract, Guilford County, NC\",\n       subtitle = \"NCWorks Career Center locations shown in red\")"
+  }
+]
