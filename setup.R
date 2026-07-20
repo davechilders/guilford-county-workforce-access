@@ -7,7 +7,6 @@ library(ggrepel)
 
 # the 
 dd <- load_variables(2023, "acs5")
-dd
 
 dd %>%
   filter(
@@ -37,8 +36,6 @@ guilford_acs <- get_acs(
 guilford_acs
 class(guilford_acs)
 glimpse(guilford_acs)
-
-guilford_acs$geometry[[2]]
 
 
 guilford_acs <- guilford_acs |> 
@@ -73,9 +70,6 @@ career_centers_sf <- career_centers_geo |>
 
 guilford_centroids <- guilford_acs |> st_centroid()
 
-guilford_acs
-guilford_centroids
-
 # precise centroid projection (project onto CRS NC State Plane - 2264)
 guilford_acs_proj <- st_transform(guilford_acs, crs = 2264)
 career_centers_proj <- st_transform(career_centers_sf, crs = 2264)
@@ -83,7 +77,6 @@ guilford_centroids_proj <- st_centroid(guilford_acs_proj)
 
 
 dist_matrix <- st_distance(guilford_centroids_proj, career_centers_proj)
-dist_matrix
 
 guilford_acs_proj <- guilford_acs_proj |> 
   mutate(dist_to_nearest_center_miles = apply(dist_matrix, 1, min) / 5280)
@@ -125,7 +118,6 @@ reference_cities <- tibble::tibble(
 reference_cities_geo <- reference_cities %>%
   geocode(address, method = "osm", lat = lat, long = long)
 
-reference_cities_geo
 
 # add career centers to choropleth map
 career_centers_coords <- career_centers_sf %>%
