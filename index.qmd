@@ -1,5 +1,5 @@
 ---
-title: "Workforce Services Accessibility in Guilford County, NC"
+title: "Workforce Services Accessibility in Guilford County"
 author: "Dave Childers"
 date: today
 format:
@@ -15,13 +15,13 @@ execute:
 
 ## Introduction
 
-Guilford county's NCWorks Career Centers provide job search assistance, career counseling, and skills training to residents across the county. Both centers are located in the county's two largest cities, Greensboro and High Point. This raises a natural question: 
+Guilford county's NCWorks Career Centers provide job search assistance, career counseling, and skills training to residents across the county. The centers are located in the county's two largest cities, Greensboro and High Point. This report visually investigates an important question:
 
 Are the workforce centers in a convenient location to communities with the highest job support needs?
 
-This project takes a first look at these questions. It maps labor market indicators including unemployment, poverty, and vehicle access across Guilford County's census tracts, alongside the locations of the two career centers. We aim to visually surface where need may be concentrated relative to where services are physically located/
+This project takes a first look at these questions. It maps labor market indicators including unemployment, poverty, and vehicle access across Guilford County's census tracts, alongside the locations of the two career centers. This report visually surfaces where need is concentrated relative to where services are physically located.
 
-**Note**: Click on the `Code` to view the underlying R code used in producing this report.
+**Note**: Click on the various `Code` sections to view the underlying code used in producing this report. The underlying code for fetching data from the American Community [Survey](https://www.census.gov/programs-surveys/acs.html) and geocoding is available on my github [page](https://github.com/davechilders/guilford-county-workforce-access/blob/main/01-load-acs.R).
 
 ```{r load_packages}
 library(sfarrow)
@@ -99,7 +99,7 @@ ggplot(guilford_acs) +
        subtitle = "NCWorks Career Center locations shown in red")
 ```
 
-This second spatial graph shows the average number of miles to the NCWorks location. The two Greensboro-area tracts with the highest unemployment have average distances of 2.4 and 4.5 miles to the NC Works location. This can pose a burden to residents without vehicle access. In the census tract where Greensboro NC Works resides, the average distance is less than half of a mile, but there is a lower need for employment services in this tract. 
+This second choropleth graph shows the average number of miles to the NCWorks location. The two Greensboro-area tracts with the highest unemployment have average distances of 2.4 and 4.5 miles to the NC Works location. This can pose a burden to residents without vehicle access. In the census tract where Greensboro NC Works resides, the average distance is less than half of a mile, but there is a lower need for employment services in this tract. 
 
 ```{r}
 guilford_centroids_coords <- guilford_acs |>
